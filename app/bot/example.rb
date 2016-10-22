@@ -29,6 +29,13 @@ Bot.on :message do |message|
         text: 'Hello, human!'
       }
     )
+  when /help/i
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: 'We\'re working on it' 
+      }
+    )
   else
     Bot.deliver(
       recipient: message.sender,
