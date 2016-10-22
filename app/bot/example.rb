@@ -56,7 +56,7 @@ Bot.on :message do |message|
           Bot.deliver(
             recipient: message.sender,
             message: {
-              text: "It's a match!"
+              text: "It's a match! :) :) :)"
             }
           )
         else
