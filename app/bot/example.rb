@@ -53,17 +53,23 @@ Bot.on :message do |message|
       users = User.where(first_name: facebook_name[0].downcase, last_name: facebook_name[1].downcase)
       if not users.empty?
         # users.each do |user|
+        # Bot.deliver(
+        #   recipient: message.sender,
+        #   message: {
+        #     attachment: {
+        #       type: 'image',
+        #       payload:{
+        #         url: users.pro_pic
+        #       }
+        #     }
+        #   }
+        # ) 
         Bot.deliver(
           recipient: message.sender,
           message: {
-            attachment: {
-              type: 'image',
-              payload:{
-                url: users.pro_pic
-              }
-            }
+            text: users.pro_pic
           }
-        ) 
+        )
       else
         Bot.deliver(
           recipient: message.sender,
