@@ -102,10 +102,10 @@ def create_relationship(user_id, crush_first_name, crush_last_name)
 end
 
 def check_match(user_id, crush_id)
-	a = Relationship.find_by(user_id: user_id)
-	b = Relationship.find_by(user_id: crush_id)
+	a = Relationship.where(user_id: user_id)
+	b = Relationship.where(user_id: crush_id)
 	puts "user_id: #{user_id}, crush_id: #{crush_id}, a.crush_id: #{a.crush_id}, b.crush_id: #{b.crush_id}"
-	if a and b and a.crush_id == crush_id and b.crush_id == user_id 
+	if a.empty? == false and b.empty? == false and a.crush_id == crush_id and b.crush_id == user_id 
 		return true
 	else
 		return false
