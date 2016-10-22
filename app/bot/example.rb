@@ -50,14 +50,20 @@ Bot.on :message do |message|
   else
     facebook_name = message.text.split
     if facebook_name.length == 2
-      user = User.where(first_name: facebook_name[0].downcase, last_name: facebook_name[1].downcase)
-      if not user.empty?
+      users = User.where(first_name: facebook_name[0].downcase, last_name: facebook_name[1].downcase)
+      if not users.empty?
+        # users.each do |user|
         Bot.deliver(
           recipient: message.sender,
           message: {
-            text: "Found the user!"
+            attachment: {
+              type: 'image',
+              payload:{
+                url: user.pro_pic
+              }
+            }
           }
-        )
+        ) 
       else
         Bot.deliver(
           recipient: message.sender,
