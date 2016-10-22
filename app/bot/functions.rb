@@ -36,33 +36,39 @@ def create_user(message)
 	puts "users"
 	if not users.empty?
 		users.each do |user|
-			Bot.deliver(
-		        recipient: {id: user.user_id},
-		        message: {
-		          	attachment: {
-			            type: 'template',
-			            payload:{
-			            	template_type:"generic",
-			            	elements:[
-			            		{
-			            			title: "Is this your crush?",
-			            			item_url:"https://www.harvard.edu",
-			            			image_url: info["profile_pic"],
-			            			subtitle: "thread_settings",
-			            			buttons: [
-			            				{
-			            					type: "postback",
-			            					title: "Yes!",
-			            					#payload: "CHECK_NEW_USER_#{info["first_name"].downcase}_#{info["last_name"].downcase}_#{user_id}"
-			            					payload: "CHECK_NEW_USER_#{user_id}"
-			            				}
-			            			]
-			            		}
-			            	]
-		            	}
-		          	}
-		        }
-	    	)	 
+			# Bot.deliver(
+		 #        recipient: {id: user.user_id},
+		 #        message: {
+		 #          	attachment: {
+			#             type: 'template',
+			#             payload:{
+			#             	template_type:"generic",
+			#             	elements:[
+			#             		{
+			#             			title: "Is this your crush?",
+			#             			item_url:"https://www.harvard.edu",
+			#             			image_url: info["profile_pic"],
+			#             			subtitle: "thread_settings",
+			#             			buttons: [
+			#             				{
+			#             					type: "postback",
+			#             					title: "Yes!",
+			#             					#payload: "CHECK_NEW_USER_#{info["first_name"].downcase}_#{info["last_name"].downcase}_#{user_id}"
+			#             					payload: "CHECK_NEW_USER_#{user_id}"
+			#             				}
+			#             			]
+			#             		}
+			#             	]
+		 #            	}
+		 #          	}
+		 #        }
+	  #   	)
+		  	Bot.deliver(
+	            recipient: {id: user.user_id},
+	            message: {
+	              text: "asdf"
+	            }
+	        )	 
 		end
 	end
 end
