@@ -97,9 +97,9 @@ Bot.on :postback do |postback|
     #   user = create_user(postback)
     # end
 
-    user = create_user(message)
+    user = create_user(postback)
 
-    text = "Welcome Lovebird! Text the name of your crush, and we'll try our best!"
+    text = "Welcome Lovebird! Text the first and last name of your crush and we'll connect you if we hear anything back!"
     Bot.deliver(
       recipient: postback.sender,
       message: {
