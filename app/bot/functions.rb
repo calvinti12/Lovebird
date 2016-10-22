@@ -78,9 +78,9 @@ def create_relationship(user_id, crush_first_name, crush_last_name)
 		Relationship.find_by(user_id: user_id).destroy
 	end
 
-	users = User.find_by(first_name: crush_first_name, last_name: crush_last_name)
+	users = User.where(first_name: crush_first_name, last_name: crush_last_name)
 	
-	if users
+	if users.any?
 	    # users.each do |user|
 	    #   Bot.deliver(
 	    #     recipient: message.sender,
