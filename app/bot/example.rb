@@ -51,7 +51,7 @@ Bot.on :message do |message|
     facebook_name = message.text.split
     if facebook_name.length == 2
       user = User.where(first_name: facebook_name[0].downcase, last_name: facebook_name[1].downcase)
-      if user
+      if not user.empty?
         Bot.deliver(
           recipient: message.sender,
           message: {
