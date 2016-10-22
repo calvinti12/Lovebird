@@ -57,13 +57,13 @@ Bot.on :message do |message|
           Bot.deliver(
             recipient: {id: found},
             message: {
-              text: "It's a match #{curr_user.first_name} #{curr_user.last_name}! :) :) :)"
+              text: "It's a match with #{curr_user.first_name} #{curr_user.last_name}! I think you guys have some stuff to talk about :) :) :) (P.S. the other received the same message!)"
             }
           )
           Bot.deliver(
             recipient: message.sender,
             message: {
-              text: "It's a match with #{facebook_name[0].downcase} #{facebook_name[1].downcase}! :) :) :)"
+              text: "It's a match with #{facebook_name[0].downcase} #{facebook_name[1].downcase}! I think you guys have some stuff to talk about :) :) :) (P.S. the other received the same message!)"
             }
           )
         else
@@ -105,6 +105,21 @@ Bot.on :postback do |postback|
       }
     ) 
     
+  when /CHECK_NEW_USER/i
+    crush_id = postback.payload.split('_')[-1]
+    user = Relationship.find_by(user_id: postback.sender["id"])
+    user.crush_id = crush_id
+    user.status = 0;
+    user.save
+    Bot.deliver(
+      recipient: postback.sender,
+      message: {
+        text: "Yay! We updated your info, we'll get back to you as soon as we hear anything!"
+      }
+    )
+
+  when /ALL_CURRENT_USER/i
+    info = "in progress"
   else
     Bot.deliver(
       recipient: postback.sender,

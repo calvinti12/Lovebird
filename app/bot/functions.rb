@@ -30,7 +30,41 @@ def create_user(message)
 		User.find_by(facebook_id: user_id).destroy
 	end
 
-	 User.create(facebook_id: user_id, first_name: info["first_name"].downcase, last_name: info["last_name"].downcase, pro_pic: info["profile_pic"]) 
+	User.create(facebook_id: user_id, first_name: info["first_name"].downcase, last_name: info["last_name"].downcase, pro_pic: info["profile_pic"]) 
+
+	users = Relationship.find_by(first_name: info["first_name"].downcase, last_name: info["last_name"].downcase, status: 1)
+	puts "users"
+	if not users.empty?
+		users.each do |user|
+			Bot.deliver(
+		        recipient: {id: user.user_id},
+		        message: {
+		          	attachment: {
+			            type: 'template',
+			            payload:{
+			            	template_type:"generic",
+			            	elements:[
+			            		{
+			            			title: "Is this your crush?",
+			            			item_url:"https://www.harvard.edu",
+			            			image_url: info["profile_pic"],
+			            			subtitle: "thread_settings",
+			            			buttons: [
+			            				{
+			            					type: "postback",
+			            					title: "Yes!",
+			            					#payload: "CHECK_NEW_USER_#{info["first_name"].downcase}_#{info["last_name"].downcase}_#{user_id}"
+			            					payload: "CHECK_NEW_USER_#{user_id}"
+			            				}
+			            			]
+			            		}
+			            	]
+		            	}
+		          	}
+		        }
+	    	)	 
+		end
+	end
 end
 
 def create_relationship(user_id, crush_first_name, crush_last_name)
