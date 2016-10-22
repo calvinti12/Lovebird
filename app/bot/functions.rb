@@ -20,3 +20,7 @@
 #   ]
 # }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAANT2k7GtasBADWMzmyTUyc59MQZCxpJWfQWFTvwsjvF3rrU97nniUD8Ov93LzDdHFtNleEMHg8AvuvGU2vf4y3FosPvI9cQ1ID1rMe52QZCZAMywQ8ZAhZBltzXwcSk0MeuEBUqfLYT16aM0LsOG8QCf0okD7vrCbPNnVqzhYwZDZD"    
 
+# def create_user(postback)
+# 	user = User.create(facebook_id: postback.sender["id"], postback.sender["first_name"], postback.sender["last_name"], postback.sender["pro_pic"]) 
+# end
+

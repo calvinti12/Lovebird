@@ -9,7 +9,7 @@ require 'functions'
 #       "payload":"WELCOME_NEW_USER"
 #     }
 #   ]
-# }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAANT2k7GtasBADWMzmyTUyc59MQZCxpJWfQWFTvwsjvF3rrU97nniUD8Ov93LzDdHFtNleEMHg8AvuvGU2vf4y3FosPvI9cQ1ID1rMe52QZCZAMywQ8ZAhZBltzXwcSk0MeuEBUqfLYT16aM0LsOG8QCf0okD7vrCbPNnVqzhYwZDZD"      
+# }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAEZAbaL0jc0BAJ5JyI1ZCGzmNR9ftC1Ca2DTAqbKTjxdMwuYZAQSzQdsZBTt5WMHWjs8q8qZBJ5jcCYlyZCNOPNxBoWGMLV99ZBa86aJHeRUZAO5jxHgtScuI7goYGfLdCqcQcy6OZBI6fhbDyvFByyZAe2ILBYbXNFmynzUY8m8nfgZDZD"      
 
 Facebook::Messenger.configure do |config|
   config.access_token = ENV['ACCESS_TOKEN']
@@ -36,6 +36,15 @@ Bot.on :message do |message|
         text: 'We\'re working on it' 
       }
     )
+  when /new user/i
+    user = User.create(facebook_id: message.sender["id"], first_name: message.sender["first_name"], last_name: message.sender["last_name"], pro_pic: message.sender["profile_pic"]) 
+
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: 'success?' 
+      }
+    )
   else
     Bot.deliver(
       recipient: message.sender,
@@ -48,6 +57,21 @@ end
 
 Bot.on :postback do |postback|
   case postback.payload
+  when /WELCOME_NEW_USER/i
+    if User.find_by(facebook_id: postback.sender["id"]) 
+      user = User.where(facebook_id: postback.sender["id"])
+    else
+      user = User.create(facebook_id: postback.sender["id"], first_name: postback.sender["first_name"], last_name: postback.sender["last_name"], pro_pic: postback.sender["profile_pic"]) 
+    end
+
+    text = "Welcome to Hot Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. \n\nText 'all events' or select the triple line menu button at the botton left and click All Events to start building your schedule!"
+    Bot.deliver(
+      recipient: postback.sender,
+      message: {
+        text: text
+      }
+    ) 
+    user = 0
 
   when "HELP"
     text = "Hello! I'm here to tell you everything going on"
