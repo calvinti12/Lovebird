@@ -74,22 +74,13 @@ def create_user(message)
 end
 
 def create_relationship(user_id, crush_first_name, crush_last_name)
-	
-	puts "1"
-
 	if Relationship.find_by(user_id: user_id)
 		Relationship.find_by(user_id: user_id)
 	end
 
-	puts "2"
-
 	users = User.find_by(first_name: crush_first_name, last_name: crush_last_name)
 	
-	puts "3"
-
 	if users
-
-		puts "4"
 	    # users.each do |user|
 	    #   Bot.deliver(
 	    #     recipient: message.sender,
