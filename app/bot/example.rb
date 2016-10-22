@@ -54,6 +54,12 @@ Bot.on :message do |message|
       if found
         if check_match(message.sender["id"], found)
           Bot.deliver(
+            recipient: {id: found},
+            message: {
+              text: "It's a match! :) :) :)"
+            }
+          )
+          Bot.deliver(
             recipient: message.sender,
             message: {
               text: "It's a match! :) :) :)"
