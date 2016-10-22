@@ -52,17 +52,18 @@ Bot.on :message do |message|
     if facebook_name.length == 2
       found = create_relationship(message.sender["id"], facebook_name[0].downcase, facebook_name[1].downcase)
       if found
+        curr_user = User.find_by(facebook_id: message.sender["id"])
         if check_match(message.sender["id"], found)
           Bot.deliver(
             recipient: {id: found},
             message: {
-              text: "It's a match! :) :) :)"
+              text: "It's a match #{curr_user.first_name} #{curr_user.last_name}! :) :) :)"
             }
           )
           Bot.deliver(
             recipient: message.sender,
             message: {
-              text: "It's a match! :) :) :)"
+              text: "It's a match with #{facebook_name[0].downcase} #{facebook_name[1].downcase}! :) :) :)"
             }
           )
         else
