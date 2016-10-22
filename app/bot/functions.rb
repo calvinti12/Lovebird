@@ -78,6 +78,8 @@ def create_relationship(user_id, crush_first_name, crush_last_name)
 		Relationship.where(user_id: user_id).destroy
 	end
 
+	puts "deleted"
+
 	users = User.where(first_name: crush_first_name, last_name: crush_last_name)
 	if not users.empty?
 	    # users.each do |user|
