@@ -9,6 +9,7 @@ gem 'jquery-rails', '4.1.1'
 gem 'turbolinks',   '5.0.0'
 gem 'jbuilder',     '2.4.1'
 gem 'facebook-messenger'
+gem 'json'
 #gem 'messenger-bot'
 
 group :development, :test do

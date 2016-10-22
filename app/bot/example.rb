@@ -1,5 +1,7 @@
 require 'facebook/messenger'
 require 'functions'
+require 'net/http'
+require 'json'
 
 # curl -X POST -H "Content-Type: application/json" -d '{
 #   "setting_type":"call_to_actions",
@@ -37,7 +39,7 @@ Bot.on :message do |message|
       }
     )
   when /new user/i
-    user = User.create(facebook_id: message.sender["id"], first_name: message.sender["first_name"], last_name: message.sender["last_name"], pro_pic: message.sender["profile_pic"]) 
+    user = create_user(message)
 
     Bot.deliver(
       recipient: message.sender,
@@ -61,7 +63,7 @@ Bot.on :postback do |postback|
     if User.find_by(facebook_id: postback.sender["id"]) 
       user = User.where(facebook_id: postback.sender["id"])
     else
-      user = User.create(facebook_id: postback.sender["id"], first_name: postback.sender["first_name"], last_name: postback.sender["last_name"], pro_pic: postback.sender["profile_pic"]) 
+      user = create_user(postback)
     end
 
     text = "Welcome to Hot Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. \n\nText 'all events' or select the triple line menu button at the botton left and click All Events to start building your schedule!"
