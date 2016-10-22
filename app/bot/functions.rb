@@ -74,14 +74,22 @@ def create_user(message)
 end
 
 def create_relationship(user_id, crush_first_name, crush_last_name)
+	
+	puts "1"
+
 	if not Relationship.where(user_id: user_id).empty?
 		Relationship.where(user_id: user_id).destroy
 	end
 
-	puts "deleted"
+	puts "2"
 
 	users = User.where(first_name: crush_first_name, last_name: crush_last_name)
+	
+	puts "3"
+
 	if not users.empty?
+
+		puts "4"
 	    # users.each do |user|
 	    #   Bot.deliver(
 	    #     recipient: message.sender,
