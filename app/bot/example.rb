@@ -120,6 +120,14 @@ Bot.on :postback do |postback|
       }
     )
 
+  when /NOPE/i
+    Bot.deliver(
+      recipient: postback.sender,
+      message: {
+        text: "Oops, we'll keep searching!"
+      }
+    )
+
   when /ALL_CURRENT_USER/i
     info = "in progress"
   else

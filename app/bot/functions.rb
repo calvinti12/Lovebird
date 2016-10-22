@@ -34,39 +34,33 @@ def create_user(message)
 
 	users = Relationship.where(first_name: info["first_name"].downcase, last_name: info["last_name"].downcase, status: 1)
 	
-	if not users.empty?
+	if users.any?
 		users.each do |user|
-			# Bot.deliver(
-		 #        recipient: {id: user.user_id},
-		 #        message: {
-		 #          	attachment: {
-			#             type: 'template',
-			#             payload:{
-			#             	template_type:"generic",
-			#             	elements:[
-			#             		{
-			#             			title: "Is this your crush?",
-			#             			item_url:"https://www.harvard.edu",
-			#             			image_url: info["profile_pic"],
-			#             			subtitle: "thread_settings",
-			#             			buttons: [
-			#             				{
-			#             					type: "postback",
-			#             					title: "Yes!",
-			#             					#payload: "CHECK_NEW_USER_#{info["first_name"].downcase}_#{info["last_name"].downcase}_#{user_id}"
-			#             					payload: "CHECK_NEW_USER_#{user_id}"
-			#             				}
-			#             			]
-			#             		}
-			#             	]
-		 #            	}
-		 #          	}
-		 #        }
-	  #   	)
+		    Bot.deliver(
+		        recipient: {id: user.user_id},
+		        message: {
+		          attachment: {
+		            type: 'image',
+		            payload:{
+		              url: info["profile_pic"]
+		            }
+		          }
+		        }
+		    )
 		  	Bot.deliver(
 	            recipient: {id: user.user_id},
 	            message: {
-	              text: "asdf"
+	            	attachment:{
+	            		type: 'template',
+	            		payload: {
+	            			template_type: 'button',
+	            			text: "Is this #{info["first_name"]} #{info["last_name"]} your crush?",
+	            			buttons: [
+	            				{ type: 'postback', title: 'Yes!', payload: 'CHECK_NEW_USER_#{user_id}' },
+          						{ type: 'postback', title: 'Nah', payload: 'NOPE' }
+	            			]
+	            		}
+	            	}
 	            }
 	        )	 
 		end
