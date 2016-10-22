@@ -72,7 +72,7 @@ Bot.on :message do |message|
           Bot.deliver(
             recipient: message.sender,
             message: {
-              text: "Logged response! We'll let you know ASAP on developments"
+              text: "Logged response! We'll let you know ASAP on developments with #{facebook_name[0].downcase} #{facebook_name[1].downcase}"
             }
           )
         end
@@ -80,10 +80,17 @@ Bot.on :message do |message|
         Bot.deliver(
           recipient: message.sender,
           message: {
-            text: "Looks like your crush hasn't used our bot :( \nWe'll let you know if your crush does end up texting us!"
+            text: "Looks like your crush #{facebook_name[0].downcase} #{facebook_name[1].downcase} hasn't used our bot :( \nWe'll let you know if your crush does end up texting us!"
           }
         )
       end
+    else
+      Bot.deliver(
+            recipient: message.sender,
+            message: {
+              text: "Sorry, we couldn't catch that. We need just the first and last name of your crush!"
+            }
+          )
     end
   end
 end
