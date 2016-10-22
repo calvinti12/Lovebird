@@ -31,6 +31,8 @@ Bot.on :message do |message|
         text: 'Hello, human!'
       }
     )
+  when /new user/i
+    user = create_user(message)
   when /help/i
     Bot.deliver(
       recipient: message.sender,
