@@ -77,17 +77,17 @@ def create_relationship(user_id, crush_first_name, crush_last_name)
 	
 	puts "1"
 
-	if not Relationship.where(user_id: user_id).empty?
-		Relationship.where(user_id: user_id).destroy
+	if Relationship.find_by(user_id: user_id)
+		Relationship.find_by(user_id: user_id)
 	end
 
 	puts "2"
 
-	users = User.where(first_name: crush_first_name, last_name: crush_last_name)
+	users = User.find_by(first_name: crush_first_name, last_name: crush_last_name)
 	
 	puts "3"
 
-	if not users.empty?
+	if users
 
 		puts "4"
 	    # users.each do |user|
