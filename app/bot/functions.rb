@@ -74,8 +74,8 @@ def create_user(message)
 end
 
 def create_relationship(user_id, crush_first_name, crush_last_name)
-	if Relationship.find_by(user_id: user_id)
-		Relationship.find_by(user_id: user_id).destroy
+	if not Relationship.where(user_id: user_id).empty?
+		Relationship.where(user_id: user_id).destroy
 	end
 
 	users = User.where(first_name: crush_first_name, last_name: crush_last_name)
