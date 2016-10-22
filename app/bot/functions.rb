@@ -62,7 +62,9 @@ def create_relationship(user_id, crush_first_name, crush_last_name)
 end
 
 def check_match(user_id, crush_id)
-	if Relationship.find_by(user_id: user_id).pluck(:crush_id) == Relationship.find_by(user_id: crush_id).pluck(:crush_id)
+	a = Relationship.find_by(user_id: user_id)
+	b = Relationship.find_by(user_id: crush_id)
+	if a and b and a.crush_id = crush_id and b.crush_id = user_id 
 		return true
 	else
 		return false
