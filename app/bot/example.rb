@@ -59,7 +59,7 @@ Bot.on :message do |message|
             attachment: {
               type: 'image',
               payload:{
-                url: user.pro_pic
+                url: users.pro_pic
               }
             }
           }
