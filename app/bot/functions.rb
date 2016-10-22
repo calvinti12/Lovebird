@@ -32,8 +32,8 @@ def create_user(message)
 
 	User.create(facebook_id: user_id, first_name: info["first_name"].downcase, last_name: info["last_name"].downcase, pro_pic: info["profile_pic"]) 
 
-	users = Relationship.find_by(first_name: info["first_name"].downcase, last_name: info["last_name"].downcase, status: 1)
-	puts users
+	users = Relationship.where(first_name: info["first_name"].downcase, last_name: info["last_name"].downcase, status: 1)
+	
 	if not users.empty?
 		users.each do |user|
 			# Bot.deliver(
