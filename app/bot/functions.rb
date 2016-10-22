@@ -33,3 +33,41 @@ def create_user(message)
 	 User.create(facebook_id: user_id, first_name: info["first_name"].downcase, last_name: info["last_name"].downcase, pro_pic: info["profile_pic"]) 
 end
 
+def create_relationship(user_id, crush_first_name, crush_last_name)
+	if Relationship.find_by(facebook_id: user_id)
+		Relationship.find_by(facebook_id: user_id).destroy
+	end
+
+	users = User.where(first_name: crush_first_name, last_name: crush_last_name)
+	if not users.empty?
+	    # users.each do |user|
+	    #   Bot.deliver(
+	    #     recipient: message.sender,
+	    #     message: {
+	    #       attachment: {
+	    #         type: 'image',
+	    #         payload:{
+	    #           url: users[0].pro_pic
+	    #         }
+	    #       }
+	    #     }
+	    #   )
+	    # end 
+	   	Relationship.create(user_id: user_id, crush_id: users[0].facebook_id, status: 0, first_name: crush_first_name, last_name: crush_last_name)
+		return users[0].facebook_id
+	else
+		Relationship.create(user_id: user_id, crush_id: nil, status: 1, first_name: crush_first_name, last_name: crush_last_name)
+		return false
+	end
+end
+
+def check_match(user_id, crush_id)
+	if Relationship.find_by(facebook_id: user_id).pluck(:crush_id) == Relationship.find_by(facebook_id: crush_id).pluck(:crush_id)
+		return true
+	else
+		return false
+	end
+end
+
+
+

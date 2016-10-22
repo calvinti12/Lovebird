@@ -38,47 +38,43 @@ Bot.on :message do |message|
         text: 'We\'re working on it' 
       }
     )
-  when /new user/i
-    user = create_user(message)
+  # when /new user/i
+  #   user = create_user(message)
 
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: 'success?' 
-      }
-    )
+  #   Bot.deliver(
+  #     recipient: message.sender,
+  #     message: {
+  #       text: 'success?' 
+  #     }
+  #   )
   else
     facebook_name = message.text.split
     if facebook_name.length == 2
-      users = User.where(first_name: facebook_name[0].downcase, last_name: facebook_name[1].downcase)
-      if not users.empty?
-        # users.each do |user|
-        Bot.deliver(
-          recipient: message.sender,
-          message: {
-            attachment: {
-              type: 'image',
-              payload:{
-                url: users[0].pro_pic
-              }
+      found = create_relationship(message.sender["id"], facebook_name[0].downcase, facebook_name[1].downcase)
+      if found
+        if check_match(message.sender["id"], found)
+          Bot.deliver(
+            recipient: message.sender,
+            message: {
+              text: "It's a match!"
             }
-          }
-        ) 
-        # Bot.deliver(
-        #   recipient: message.sender,
-        #   message: {
-        #     text: users[0]
-        #   }
-        # )
+          )
+        else
+          Bot.deliver(
+            recipient: message.sender,
+            message: {
+              text: "Logged response! We'll let you know ASAP on developments"
+            }
+          )
+        end
       else
         Bot.deliver(
           recipient: message.sender,
           message: {
-            text: "Couldn't find that person. Text the first and last name of the person."
+            text: "Looks like your crush hasn't used our bot :( \nWe'll let you know if your crush does end up texting us!"
           }
         )
       end
-
     end
   end
 end
@@ -86,35 +82,27 @@ end
 Bot.on :postback do |postback|
   case postback.payload
   when /WELCOME_NEW_USER/i
-    if User.find_by(facebook_id: postback.sender["id"]) 
-      user = User.where(facebook_id: postback.sender["id"])
-    else
-      user = create_user(postback)
-    end
+    # if User.find_by(facebook_id: postback.sender["id"]) 
+    #   user = User.where(facebook_id: postback.sender["id"])
+    # else
+    #   user = create_user(postback)
+    # end
 
-    text = "Welcome to Hot Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. \n\nText 'all events' or select the triple line menu button at the botton left and click All Events to start building your schedule!"
+    user = create_user(message)
+
+    text = "Welcome Lovebird! Text the name of your crush, and we'll try our best!"
     Bot.deliver(
       recipient: postback.sender,
       message: {
         text: text
       }
     ) 
-    user = 0
-
-  when "HELP"
-    text = "Hello! I'm here to tell you everything going on"
-    Bot.deliver(
-      recipient: postback.sender,
-      message: {
-        text: text
-      }
-    )
     
   else
     Bot.deliver(
       recipient: postback.sender,
       message: {
-        text: "Couldn't understand that. Try messaging 'help'. If this is the first time using the bot, text 'new user'"
+        text: "Couldn't understand that. Try messaging 'help'."
       }
     )
   end
