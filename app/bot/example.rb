@@ -67,7 +67,7 @@ Bot.on :message do |message|
         Bot.deliver(
           recipient: message.sender,
           message: {
-            text: users.pro_pic
+            text: "found!"
           }
         )
       else
