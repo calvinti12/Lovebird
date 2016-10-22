@@ -56,7 +56,7 @@ def create_user(message)
 	            			template_type: 'button',
 	            			text: "Is this #{info["first_name"]} #{info["last_name"]} your crush?",
 	            			buttons: [
-	            				{ type: 'postback', title: 'Yes!', payload: 'CHECK_NEW_USER_#{user_id}' },
+	            				{ type: 'postback', title: 'Yes!', payload: 'CHECK_NEW_USER_' + user_id },
           						{ type: 'postback', title: 'Nah', payload: 'NOPE' }
 	            			]
 	            		}
