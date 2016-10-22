@@ -48,12 +48,26 @@ Bot.on :message do |message|
       }
     )
   else
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: "I couldn't catch that. Try texting 'help'"
-      }
-    )
+    facebook_name = message.text.split
+    if facebook_name.length == 2
+      user = User.where(first_name: facebook_name[0].downcase, last_name: facebook_name[1].downcase)
+      if user
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "Found the user!"
+          }
+        )
+      else
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "Couldn't find that person. Text the first and last name of the person."
+          }
+        )
+      end
+
+    end
   end
 end
 

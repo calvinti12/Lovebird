@@ -30,6 +30,6 @@ def create_user(message)
 		User.find_by(facebook_id: user_id).destroy
 	end
 
-	 User.create(facebook_id: user_id, first_name: info["first_name"], last_name: info["last_name"], pro_pic: info["profile_pic"]) 
+	 User.create(facebook_id: user_id, first_name: info["first_name"].downcase, last_name: info["last_name"].downcase, pro_pic: info["profile_pic"]) 
 end
 
