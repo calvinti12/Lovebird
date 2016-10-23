@@ -67,29 +67,14 @@ def create_user(message)
 	end
 end
 
-def create_relationship(user_id, crush_first_name, crush_last_name)
+def create_relationship(user_id, crush_id, crush_first_name, crush_last_name)
 	if Relationship.find_by(user_id: user_id)
 		Relationship.find_by(user_id: user_id).destroy
 	end
-
-	users = User.where(first_name: crush_first_name, last_name: crush_last_name)
 	
-	if users.any?
-	    # users.each do |user|
-	    #   Bot.deliver(
-	    #     recipient: message.sender,
-	    #     message: {
-	    #       attachment: {
-	    #         type: 'image',
-	    #         payload:{
-	    #           url: users[0].pro_pic
-	    #         }
-	    #       }
-	    #     }
-	    #   )
-	    # end 
-	   	Relationship.create(user_id: user_id, crush_id: users[0].facebook_id, status: 0, first_name: crush_first_name, last_name: crush_last_name)
-		return users[0].facebook_id
+	if crush_id != nil
+	   	Relationship.create(user_id: user_id, crush_id: crush_id, status: 0, first_name: crush_first_name, last_name: crush_last_name)
+		return crush_id
 	else
 		Relationship.create(user_id: user_id, crush_id: nil, status: 1, first_name: crush_first_name, last_name: crush_last_name)
 		return false
@@ -107,6 +92,4 @@ def check_match(user_id, crush_id)
 	end
 	return false
 end
-
-
 

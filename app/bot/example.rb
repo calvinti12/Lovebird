@@ -40,57 +40,57 @@ Bot.on :message do |message|
         text: 'We\'re working on it' 
       }
     )
-  # when /new user/i
-  #   user = create_user(message)
-
-  #   Bot.deliver(
-  #     recipient: message.sender,
-  #     message: {
-  #       text: 'success?' 
-  #     }
-  #   )
   else
     facebook_name = message.text.split
     if facebook_name.length == 2
-      found = create_relationship(message.sender["id"], facebook_name[0].downcase, facebook_name[1].downcase)
-      if found
-        curr_user = User.find_by(facebook_id: message.sender["id"])
-        if check_match(message.sender["id"], found)
-          Bot.deliver(
-            recipient: {id: found},
-            message: {
-              text: "It's a match with #{curr_user.first_name} #{curr_user.last_name}! I think you guys have some stuff to talk about :) :) :) (P.S. the other received the same message!)"
-            }
-          )
-          Bot.deliver(
+      first_name = facebook_name[0].lower
+      last_name = facebook_name[1].lower
+      users = User.where(first_name: first_name, last_name: last_name).limit(1)
+      if users.any?
+        Bot.deliver(
             recipient: message.sender,
             message: {
-              text: "It's a match with #{facebook_name[0].downcase} #{facebook_name[1].downcase}! I think you guys have some stuff to talk about :) :) :) (P.S. the other received the same message!)"
+              attachment: {
+                type: 'image',
+                payload:{
+                  url: users[0].pro_pic
+                }
+              }
             }
-          )
-        else
-          Bot.deliver(
-            recipient: message.sender,
-            message: {
-              text: "Logged response! We'll let you know ASAP on developments with #{facebook_name[0].downcase} #{facebook_name[1].downcase}"
+        ) 
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            attachment:{
+              type: 'template',
+              payload: {
+                template_type: 'button',
+                text: "Is this your crush?",
+                buttons: [
+                  { type: 'postback', title: 'Yes!', payload: 'NEW_RELATIONSHIP_' + first_name + "_" + last_name + "_" + users[0].crush_id },
+                  { type: 'postback', title: 'Nah', payload: 'ALL_CURRENT_USER_' + first_name + "_" + last_name + "_" + "1"}
+                ]
+              }
             }
-          )
-        end
+          }
+        ) 
       else
         Bot.deliver(
           recipient: message.sender,
           message: {
-            text: "Looks like your crush #{facebook_name[0].downcase} #{facebook_name[1].downcase} hasn't used our bot :( \nWe'll let you know if your crush does end up texting us!"
+            text: "Looks like your crush hasn't used our bot :( \nWe'll keep the name on record and let you know if your crush does end up texting us!"
           }
         )
+        Relationship.create(user_id: message.sender["id"], crush_id: nil, status: 1, first_name: first_name, last_name: last_name)
+
       end
     else
       Bot.deliver(
-            recipient: message.sender,
-            message: {
-              text: "Sorry, we couldn't catch that. We need just the first and last name of your crush!"
-            }
-          )
+        recipient: message.sender,
+        message: {
+          text: "Sorry, we couldn't catch that. We need just the first and last name of your crush!"
+        }
+      )
     end
   end
 end
@@ -136,7 +136,77 @@ Bot.on :postback do |postback|
     )
 
   when /ALL_CURRENT_USER/i
-    info = "in progress"
+    crush_num = postback.payload.split('_')[-1].to_i
+    first_name = postback.payload.split('_')[-3]
+    last_name = postback.payload.split('_')[-2]
+    users = User.where(first_name: first_name, last_name: last_name).limit(1).offset(crush_num)
+    
+    if users.any?
+      Bot.deliver(
+          recipient: postback.sender,
+          message: {
+            attachment: {
+              type: 'image',
+              payload:{
+                url: users[0].pro_pic
+              }
+            }
+          }
+      ) 
+      Bot.deliver(
+        recipient: postback.sender,
+        message: {
+          attachment:{
+            type: 'template',
+            payload: {
+              template_type: 'button',
+              text: "Is this your crush?",
+              buttons: [
+                { type: 'postback', title: 'Yes!', payload: 'NEW_RELATIONSHIP_' + first_name + "_" + last_name + "_" + users[0].crush_id },
+                { type: 'postback', title: 'Nah', payload: 'ALL_CURRENT_USER_' + first_name + "_" + last_name + "_" + (crush_num+1).to_s}
+              ]
+            }
+          }
+        }
+      ) 
+    else
+      Bot.deliver(
+        recipient: postback.sender,
+        message: {
+          text: "Looks like your crush hasn't used our bot :( \nWe'll keep the name on record and let you know if your crush does end up texting us!"
+        }
+      )
+      create_relationship(postback.sender["id"], nil, first_name, last_name)
+    end
+
+  when /NEW_RELATIONSHIP/i
+    crush_id = postback.payload.split('_')[-1]
+    first_name = postback.payload.split('_')[-3]
+    last_name = postback.payload.split('_')[-2]
+    create_relationship(postback.sender["id"], crush_id, first_name, last_name)
+    curr_user = User.find_by(facebook_id: postback.sender["id"])
+    if check_match(postback.sender["id"], crush_id)
+      Bot.deliver(
+        recipient: {id: crush_id},
+        message: {
+          text: "It's a match with #{curr_user.first_name} #{curr_user.last_name}! I think you guys have some stuff to talk about :) :) :) (P.S. the other received the same message!)"
+        }
+      )
+      Bot.deliver(
+        recipient: postback.sender,
+        message: {
+          text: "It's a match with #{first_name} #{last_name}! I think you guys have some stuff to talk about :) :) :) (P.S. the other received the same message!)"
+        }
+      )
+    else
+      Bot.deliver(
+        recipient: postback.sender,
+        message: {
+          text: "Logged response! We'll let you know ASAP on developments with #{facebook_name[0].downcase} #{facebook_name[1].downcase}"
+        }
+      )
+    end
+
   else
     Bot.deliver(
       recipient: postback.sender,
