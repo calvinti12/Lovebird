@@ -81,8 +81,8 @@ Bot.on :message do |message|
             text: "Looks like your crush hasn't used our bot :( \nWe'll keep the name on record and let you know if your crush does end up texting us!"
           }
         )
-        Relationship.create(user_id: message.sender["id"], crush_id: nil, status: 1, first_name: first_name, last_name: last_name)
-
+        #Relationship.create(user_id: message.sender["id"], crush_id: nil, status: 1, first_name: first_name, last_name: last_name)
+        create_relationship(message.sender["id"], nil, first_name, last_name)
       end
     else
       Bot.deliver(
