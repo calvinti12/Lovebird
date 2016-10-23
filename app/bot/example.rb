@@ -202,7 +202,7 @@ Bot.on :postback do |postback|
       Bot.deliver(
         recipient: postback.sender,
         message: {
-          text: "Logged response! We'll let you know ASAP on developments with #{facebook_name[0].downcase} #{facebook_name[1].downcase}"
+          text: "Logged response! We'll let you know ASAP on developments with #{first_name} #{last_name}"
         }
       )
     end
