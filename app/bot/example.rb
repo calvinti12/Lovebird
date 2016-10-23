@@ -43,8 +43,8 @@ Bot.on :message do |message|
   else
     facebook_name = message.text.split
     if facebook_name.length == 2
-      first_name = facebook_name[0].lower
-      last_name = facebook_name[1].lower
+      first_name = facebook_name[0].downcase
+      last_name = facebook_name[1].downcase
       users = User.where(first_name: first_name, last_name: last_name).limit(1)
       if users.any?
         Bot.deliver(
