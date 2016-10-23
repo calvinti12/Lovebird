@@ -162,7 +162,7 @@ Bot.on :postback do |postback|
               template_type: 'button',
               text: "Is this your crush?",
               buttons: [
-                { type: 'postback', title: 'Yes!', payload: 'NEW_RELATIONSHIP_' + first_name + "_" + last_name + "_" + users[0].crush_id },
+                { type: 'postback', title: 'Yes!', payload: 'NEW_RELATIONSHIP_' + first_name + "_" + last_name + "_" + users[0].facebook_id },
                 { type: 'postback', title: 'Nah', payload: 'ALL_CURRENT_USER_' + first_name + "_" + last_name + "_" + (crush_num+1).to_s}
               ]
             }
