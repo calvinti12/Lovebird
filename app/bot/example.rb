@@ -106,7 +106,7 @@ Bot.on :postback do |postback|
 
     user = create_user(postback)
 
-    text = "Welcome Lovebird! Text the first and last name of your crush and we'll connect you if we hear anything back!"
+    text = "Welcome to Lovebird! Text the first and last name of your crush and we'll connect you if we hear anything back! WE ONLY KEEP TRACK OF THE MOST RECENT NAME YOU GIVE"
     Bot.deliver(
       recipient: postback.sender,
       message: {
@@ -123,7 +123,7 @@ Bot.on :postback do |postback|
     Bot.deliver(
       recipient: postback.sender,
       message: {
-        text: "Yay! We updated your info, we'll get back to you as soon as we hear anything!"
+        text: "Yay! We updated your info, we'll get back to you as soon as we hear anything! Remember, we only keep track of your latest crush!"
       }
     )
 
@@ -202,7 +202,7 @@ Bot.on :postback do |postback|
       Bot.deliver(
         recipient: postback.sender,
         message: {
-          text: "Logged response! We'll let you know ASAP on developments with #{first_name} #{last_name}"
+          text: "Logged response! We'll let you know ASAP on developments with #{first_name} #{last_name}. Remember we only track the latest crush!"
         }
       )
     end
