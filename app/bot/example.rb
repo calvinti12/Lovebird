@@ -205,12 +205,12 @@ Bot.on :postback do |postback|
           text: "Logged response! We'll let you know ASAP on developments with #{first_name} #{last_name}. Remember we only track the latest crush!"
         }
       )
-      Bot.deliver(
-        recipient: {id: crush_id},
-        message: {
-          text: "Someone has a crush on you! We can't say who though :) :) :)"
-        }
-      )
+      # Bot.deliver(
+      #   recipient: {id: crush_id},
+      #   message: {
+      #     text: "Someone has a crush on you! We can't say who though :) :) :)"
+      #   }
+      # )
     end
 
   else
